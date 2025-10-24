@@ -101,3 +101,24 @@ signInForm.addEventListener("submit", async (e) => {
     alert("Sign-in failed. Check console for details.")
   }
 })
+
+
+
+
+const resetBtn = document.getElementById("resetBtn");
+
+resetBtn?.addEventListener("click", async () => {
+  const email = document.getElementById("resetEmail").value.trim();
+  if (!email) return alert("Please enter your email.");
+
+  const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://william-daniel-maistry.github.io/Testing_App/reset.html' // <-- page where user sets new password
+  });
+
+  if (error) {
+    console.error("Error sending password reset:", error.message);
+    alert("Error sending reset email: " + error.message);
+  } else {
+    alert("Password reset email sent! Check your inbox.");
+  }
+});
