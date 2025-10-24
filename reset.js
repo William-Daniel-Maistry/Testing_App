@@ -1,8 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
-
 const supabaseUrl = 'https://yohbyoeuukvadrpgaxus.supabase.co';
 const supabaseKey = 'YOUR_ANON_KEY';
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 document.getElementById("updatePasswordBtn").addEventListener("click", async () => {
   const newPassword = document.getElementById("newPassword").value.trim();
@@ -20,6 +18,7 @@ document.getElementById("updatePasswordBtn").addEventListener("click", async () 
     window.location.href = "profile.html"; // back to login
   }
 });
+
 
 
 
