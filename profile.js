@@ -29,6 +29,8 @@ showSignIn.addEventListener("click", () => {
 })
 
 
+
+
 // Password Validation Function
 function isValidPassword(password) {
   const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
@@ -51,19 +53,51 @@ signUpForm.addEventListener("submit", async (e) => {
     return;
   }
 
+
+    // --- START: Silent email check ---
   try {
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: emailSignUp,
+      password: "dummyPassword123!",
+    });
+
+    if (!error) {
+      // Somehow signed in with dummy password? User exists
+      alert("You already have an account. Please log in instead.");
+      return;
+    }
+
+    if (error.message.includes("Invalid login credentials")) {
+      // Email exists, wrong password
+      alert("You already have an account. Please log in instead.");
+      return;
+    }
+
+    // If error.message says "User not found", we can safely continue
+  } catch (err) {
+    console.error("Error checking email:", err);
+    // Optionally allow sign-up to continue anyway
+  }
+  // --- END: Silent email check ---
+
+
+  try {
+    const { error } = await supabaseClient.auth.signUp({
       email: emailSignUp,
       password: passwordSignUp,
       options: {
-        data: { firstname: firstname, lastname: lastname }
+        data: { firstname, lastname }
       }
     });
 
-    if (error) {
-      alert(`Error: ${error.message}`);
-      return;
+  if (error) {
+    if (error.message.includes("User already registered")) {
+      alert("You already have an account. Please log in instead.");
+    } else {
+      alert("Sign up failed: " + error.message);
     }
+    return;
+  }
 
     alert("Sign-up successful! Please check your email for confirmation.");
     signUpForm.reset();
