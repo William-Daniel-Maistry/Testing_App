@@ -160,6 +160,15 @@ input {
 
 
 
+span {
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
+
+
+
+
 #message-container {
   background-color: whitesmoke;
   width: 90vw;
@@ -186,6 +195,22 @@ input {
   margin: 2em;
   font-size: 2em;
 }
+
+
+
+.reactions {
+  display: flex;
+  gap: 10px;
+}
+
+.likeBtn.active {
+  color: green;
+}
+
+.dislikeBtn.active {
+  color: red;
+}
+
 
 
 /* ========== RESPONSIVE LAYOUT ========== */

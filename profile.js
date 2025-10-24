@@ -1,19 +1,103 @@
 // profile.js
 
-const form = document.querySelector("form")
 
-if (form) {
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    localStorage.setItem("signUp", "true");
-    const firstname = document.getElementById("firstname").value.trim();
-    const lastname = document.getElementById("lastname").value.trim();
+  // Initialize Supabase client
+  const supabaseUrl = 'https://yohbyoeuukvadrpgaxus.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaGJ5b2V1dWt2YWRycGdheHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjkzNzksImV4cCI6MjA3Njc0NTM3OX0.W8x5lP1zaB6Us80h7poH1neJmSDtPY8PvtQj2MMuvNg';
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-    localStorage.setItem("firstname", firstname)
-    localStorage.setItem("lastname", lastname)
-    window.location.href = "index.html"
-  })
+
+
+const signInForm = document.getElementById("signInForm");
+const signUpForm = document.getElementById("signUpForm");
+const showSignUp = document.getElementById("showSignUp");
+const showSignIn = document.getElementById("showSignIn");
+
+
+
+signUpForm.style.display = "none";
+
+
+showSignUp.addEventListener("click", () => {
+  signInForm.style.display = "none";
+  signUpForm.style.display = "flex";
+})
+
+showSignIn.addEventListener("click", () => {
+  signUpForm.style.display = "none";
+  signInForm.style.display = "flex";
+})
+
+
+// Password Validation Function
+function isValidPassword(password) {
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+  return regex.test(password);
 }
 
+// Sign-Up Handler
+signUpForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const firstname = document.getElementById("firstname").value.trim();
+  const lastname = document.getElementById("lastname").value.trim();
+  const emailSignUp = document.getElementById("signUpEmail").value.trim();
+  const passwordSignUp = document.getElementById("signUpPassword").value;
+
+  if (!isValidPassword(passwordSignUp)) {
+    alert(
+      "Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character."
+    );
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: emailSignUp,
+      password: passwordSignUp,
+      options: {
+        data: { firstname: firstname, lastname: lastname }
+      }
+    });
+
+    if (error) {
+      alert(`Error: ${error.message}`);
+      return;
+    }
+
+    alert("Sign-up successful! Please check your email for confirmation.");
+    signUpForm.reset();
+    signUpForm.style.display = "none";
+    signInForm.style.display = "flex";
+  } catch (err) {
+    console.error(err);
+    alert("Sign-up failed. Check console for details.")
+  }
+});
 
 
+// Sign-In Handler
+signInForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const emailSignIn = document.getElementById("signInEmail").value.trim();
+  const passwordSignIn = document.getElementById("signInPassword").value;
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: emailSignIn,
+      password: passwordSignIn,
+    });
+
+    if (error) {
+      alert(`Error: ${error.message}`);
+      return;
+    }
+
+    alert(`Sign-in successful! Welcome back.`);
+    window.location.href = "index.html"
+  } catch (err) {
+    console.error(err);
+    alert("Sign-in failed. Check console for details.")
+  }
+})

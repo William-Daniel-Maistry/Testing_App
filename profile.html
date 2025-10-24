@@ -5,17 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="profile.js" defer></script>
 </head>
 <body>
   <main id="main__profile">
-    <h1>Sign Up</h1>
-    <form>
+    <h1 class="center">Welcome</h1>
+    
+    <form id="signInForm">
+      <h2 class="center">Sign In</h2>
+      <label for="signInFirstname">First Name/s</label>
+      <!-- <input type="text" id="signInFirstname" placeholder="John" required aria-required="true"> -->
+      <!-- <label for="signInLastname">Last Name</label> -->
+      <!-- <input type="text" id="signInLastname" placeholder="Doe" required aria-required="true"> -->
+      <label for="signInEmail">Email</label>
+      <input type="email" id="signInEmail" placeholder="email@address.com" required aria-required="true">
+      <label for="signInPassword">Password</label>
+      <input type="password" id="signInPassword" placeholder="Password" required aria-required="true">
+      <button type="submit">Sign In</button>
+      <p>Don't have an account? <span id="showSignUp">Sign Up</span></p>
+    </form>
+    
+    <form id="signUpForm">
+      <h2 class="center">Sign Up</h2>
       <label for="firstname">First Name/s</label>
       <input type="text" id="firstname" placeholder="John" required aria-required="true">
       <label for="lastname">Last Name</label>
       <input type="text" id="lastname" placeholder="Doe" required aria-required="true">
-      <button type="submit" id="signUpBtn">Create Account</button>
+      <label for="signUpEmail">Email</label>
+      <input type="email" id="signUpEmail" placeholder="email@address.com" required aria-required="true">
+      <label for="signUpPassword">Password</label>
+      <input type="password" id="signUpPassword" placeholder="Password" required aria-required="true">
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <span id="showSignIn">Sign In</span></p>
     </form>
   </main>
 </body>
